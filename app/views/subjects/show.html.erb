@@ -1,0 +1,35 @@
+<div class="container">
+  <h1>Your subject</h1>
+  <p>
+    <strong>Subject:</strong>
+    <%= @subject.name %>
+  </p>
+  <p>
+    <strong>Teacher:</strong>
+    <%= @subject.teacher.name %>
+  </p>
+  <ul>
+    <% @subject.school_classes.each do |school_class| %>
+      <li>
+        <%= school_class.name %>
+        <ul>
+          <% school_class.students.each do |student| %>
+            <li>
+              <%= student.name %>:
+              <% student.grades.teacher_student_grades(current_user.id).each do |g| %>
+                <%= g.value %>
+                <%= link_to '', edit_grade_path(g.id), class: 'glyphicon glyphicon-edit' %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+    <% end %>
+  </ul>
+  <%= link_to 'Add grade', new_grade_path, class: 'btn btn-success btn-sm', role: 'button' %>
+  <%= link_to 'Back', root_path, class: 'btn btn-danger btn-sm', role: 'button' %>
+  <%= link_to 'Your actions', grades_history_path, class: 'btn btn-warning btn-sm', role: 'button' %>
+  <%= link_to 'generate summary', generate_path, class: 'btn btn-info btn-sm', role: 'button' %>
+  <% if File.exist?("#{Rails.root}/public/file.csv") %>
+    <%= link_to 'Download CSV', grades_download_csv_url %>
+  <% end %>
+</div>

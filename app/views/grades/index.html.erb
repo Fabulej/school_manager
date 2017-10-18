@@ -1,0 +1,15 @@
+<div class="container">
+  <h1>Your grades</h1>
+    <ul>
+      <% current_user.school_class.subjects.order(name: :asc).each do |subject| %>
+        <li>
+          <p>Subject: <%=subject.name %></p>
+            Grades: <% subject.grades.where(user_id: current_user.id).each do |grade| %>
+            <%= grade.value %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+    <%= link_to 'Back', root_path, class: 'btn btn-danger btn-sm', role: 'button' %>
+
+</div>

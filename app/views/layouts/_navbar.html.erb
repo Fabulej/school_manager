@@ -1,0 +1,33 @@
+<nav id="navi" class="navbar navbar-default navbar-fixed-top main-navbar">
+  <div class="container-fluid">
+    <% if user_signed_in? %>
+      <ul class="nav navbar-nav navbar-left">
+        <% if current_user.admin? %>
+          <%=link_to  "Admin's Panel", root_path, class: 'navbar-brand' %>
+          <li><%= link_to 'School Classes', school_classes_path, role: 'button' %></li>
+          <li><%= link_to 'Subjects', subjects_path, role: 'button' %></li>
+          <li><%= link_to 'Users', users_path, role: 'button' %></li>
+        <% end %>
+        <% if current_user.teacher? %>
+          <% if current_user.subject %>
+            <a class="navbar-brand"><%= current_user.subject.name %></a>
+            <li><%= link_to 'Your subject', subject_path(current_user.subject.id), role: 'button' %></li>
+          <% end %>
+        <% end %>
+        <% if current_user.student? %>
+          <p class="navbar-brand">Class: <%= current_user.school_class.name %></p>
+          <li><%= link_to 'Your grades', user_path(current_user) %></li>
+        <% end %>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <% if user_signed_in? %>
+          <li><%= link_to current_user.name, user_path(current_user) %></li>
+          <li><%= link_to 'Edit profile', edit_user_path(current_user), role: 'button'%></li>
+          <li><%= link_to 'Log out', destroy_user_session_path, method: :delete, role: 'button' %></li>
+        <% else %>
+          <li><%= link_to 'Sign in', new_user_session_path, role: 'button'%></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</nav>

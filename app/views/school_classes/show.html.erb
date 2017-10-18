@@ -1,0 +1,22 @@
+
+<p>
+  <strong>Class:</strong>
+  <%= @school_class.name %>
+</p>
+<h3>Students: </h3>
+<% if @school_class.students.empty? %>
+  <p>No students assigned to the class.<p>
+<% else %>
+  <% @school_class.students.each do |student| %>
+    <p><%= student.name %></p><br/>
+  <% end %>
+<% end %>
+<h3>Subjects: </h3>
+<% if @school_class.subjects.empty? %>
+  <p>No subjects assigned to the class.<p>
+<% else %>
+  <% @school_class.subjects.each do |subject| %>
+    <p><%= subject.name %></p><br/>
+  <% end %>
+<% end %>
+<%= link_to 'Back', school_classes_path, class: 'btn btn-danger btn-sm', role: 'button' %>

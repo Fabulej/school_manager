@@ -1,0 +1,47 @@
+<div class="jumbotron">
+  <table class="table table-striped">
+   <thead class="thead-inverse">
+     <tr>
+       <th>Subjects(<%= Subject.count %>)</th>
+       <th>Classes(<%= SchoolClass.count %>)</th>
+       <th>Users(<%= User.count %>)</th>
+     </tr>
+   </thead>
+
+   <tbody>
+       <tr>
+         <td>
+           <% Subject.all.each do |subject| %>
+             <ul class="list-group list-unstyled">
+               <li>Subject: <%= subject.name %></li>
+               <li>Teacher:
+                 <%= subject.teacher ? subject.teacher.name : 'Not assigned!' %>
+               </li>
+               <li>Number of grades: <%= subject.grades.count %></li>
+            </ul>
+           <% end %>
+         </td>
+         <td>
+           <% SchoolClass.all.each do |school_class| %>
+             <ul class="list-group list-unstyled">
+               <li>Class: <%= school_class.name %></li>
+               <li>Number of subjects: <%= school_class.subjects.count %></li>
+               <li>Number of students: <%= school_class.students.count %></li>
+             </ul>
+           <% end %>
+         </td>
+         <td>
+           <ul class="list-group list-unstyled">
+             <li>Number of admins: <%= User.admins.count %></li>
+             <li>Number of teachers: <%= User.teachers.count %>
+               (not assigned to subject: <%= User.teachers.where(subject_id: nil).count %> )
+             </li>
+             <li>Number of students: <%= User.students.count %>
+               (not assigned to class: <%= User.students.where(school_class_id: nil).count %> )
+             </li>
+           </ul>
+         </td>
+       </tr>
+   </tbody>
+  </table>
+</div>

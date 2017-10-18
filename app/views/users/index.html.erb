@@ -1,0 +1,43 @@
+
+<div class="row">
+<div class= "col-xs-4">
+  <h1> Admins </h1>
+  <% @admins.order('last_name').each do |admin| %>
+    <p><%= admin.name %></p><br/>
+  <% end %>
+</div>
+
+<div class= "col-xs-4">
+  <h1> Teachers </h1>
+  <% @teachers.order('last_name').each do |teacher| %>
+    <p>
+      <%= teacher.name %>
+      <p> <% if teacher.subject.nil? %>
+            <%= link_to 'Assign to subject', user_path(teacher.id), class: 'btn btn-success btn-sm', role: 'button' %>
+          <% else %>
+            <p>Subject: <b><%= teacher.subject.name %></b>
+          <% end %>
+          <%= link_to 'Edit user', edit_user_path(teacher.id), class: 'btn btn-success btn-sm', role: 'button' %>
+      </p>
+    </p><br/>
+  <% end %>
+</div>
+
+<div class= "col-xs-4">
+  <h1> Students </h1>
+  <% @students.order('last_name').each do |student| %>
+    <p><%= link_to student.name, user_path(student.id) %>
+      <p> <% if student.school_class.nil? %>
+            <%= link_to 'Assign to class', user_path(student.id), class: 'btn btn-success btn-sm', role: 'button' %>
+          <% else %>
+            <%= link_to 'Edit user', edit_user_path(student.id), class: 'btn btn-success btn-sm', role: 'button' %>
+            <p>Class: <b><%= student.school_class.name %></b></p>
+          <% end %>
+      </p>
+    </p><br/>
+  <% end %>
+</div>
+</div>
+
+<%= link_to 'Add User', new_user_registration_path, class: 'btn btn-primary btn-sm', role: 'button' %>
+<%= link_to 'Back', root_path, class: 'btn btn-danger btn-sm', role: 'button' %>

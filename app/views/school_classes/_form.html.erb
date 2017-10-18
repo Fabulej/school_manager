@@ -1,0 +1,37 @@
+<% if @school_class.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@school_class.errors.count, "error") %> prohibited this school class from being saved:</h2>
+
+      <ul>
+      <% @school_class.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+<% end %>
+<%= form_for @school_class do |f| %>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, autofocus: true %>
+  </div>
+
+  <%= fields_for :students do |s| %>
+    <div class="field">
+      <%= s.label "All students" %><br />
+      <%= collection_select(:students, :id, User.unassigned_students, :id, :name,
+            {include_hidden: false}, {multiple: true}) %>
+    </div>
+  <% end %>
+
+  <%= fields_for :school_class_subjects do |scs| %>
+    <div class="field">
+      <%= scs.label "All Subjects" %><br />
+      <%= collection_select(:subjects, :id, Subject.all, :id, :name,
+            {include_hidden: false}, {multiple: true}) %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit "Confirm", class: 'btn btn-success btn-sm', role: 'button' %>
+  </div>
+<% end %>

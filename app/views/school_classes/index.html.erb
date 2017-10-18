@@ -1,0 +1,50 @@
+<div class="row">
+  <h1>School Classes</h1> 
+</div>
+<div class="row">
+    <% if current_user.admin? %>
+    <%= link_to 'Add School Class', new_school_class_path, class: 'btn btn-primary btn-sm', role: 'button' %>
+  <% end %>
+
+  <%= link_to 'Back', root_path, class: 'btn btn-danger btn-sm', role: 'button' %>
+</div>
+<div class="school_class_summary">
+  <% @school_classes.order(:name).each do |school_class| %>
+    <div class="row">
+        <div class="col-xs-3">
+          <% if can? :read, school_class %>
+            <h3>Class: <%= school_class.name %></h3>
+            <% if current_user.admin? %>
+            <%= link_to 'Destroy', school_class, method: :delete,
+                  data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %>
+            <%= link_to 'Assign subjects and students', edit_school_class_path(school_class),
+                  class: 'btn btn-warning btn-sm', role: 'button' %>
+            <% end %>
+        </div>
+        <div class="col-xs-3">
+          <h3>Students: </h3>
+          <% if school_class.students.empty? %>
+            <p>No students assigned to the class.<p>
+          <% else %>
+              <% school_class.students.each do |student| %>
+                <p>
+                  <%= link_to student.name, user_path(student) %>
+                </p><br/>
+            <% end %>
+          <% end %>
+        </div>
+        <div class="col-xs-3">
+          <h3>Subjects: </h3>
+          <% if school_class.subjects.empty? %>
+            <p>No subjects assigned to the class.<p>
+          <% else %>
+            <% school_class.subjects.each do |subject| %>
+              <p><%= link_to subject.name, subject_path(subject) %></p><br/>
+            <% end %>
+          <% end %>
+        <% end %>
+        </div>
+  </div>
+  <% end %>
+</div>
+  

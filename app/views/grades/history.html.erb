@@ -1,0 +1,51 @@
+<div class="container">
+  <h2>Your actions</h2>
+    <ul>
+      <% @versions.where(whodunnit: current_user).each do |v| %>
+        <li>
+          <h4>
+            <%= v.created_at.strftime('%a, %d %b %Y %H:%M:%S') %>
+            grade number:
+            <% if Grade.find_by(id: v.item_id) %>
+              <%= link_to v.item_id, grade_path(v.item_id), title: "Current values" %>
+            <% else %>
+              <%= link_to v.item_id, "#", title: "This grade has been deleted" %>
+            <% end%>
+          </h4>
+          <% case v.event %>
+          <% when 'create' %>
+            <p>
+              You created <b><%= v.value %></b> grade for <b><%= User.find(v.user_id).name %></b>.
+              <% unless v.description.empty? %>
+                <span>Description: <b><%= v.description %></b></span>
+              <% end %>
+            </p>
+          <% when 'destroy' %>
+            <p> You deleted <b><%= User.find(v.user_id).name %>'s <%= v.value %></b> grade.</p>
+          <% when 'update' %>
+            <p>
+              <% if v.changeset.include? 'value' %>
+                You changed <b><%= User.find(v.user_id).name %>'s</b> grade from <b><%= v.value %></b> to
+                <% unless v.next.blank? %>
+                  <b><%= @versions.find(v.id).next.value %></b>
+                <% else %>
+                  <b><%= Grade.find(v.item_id).value %></b>
+                <% end %>
+              <% end %>
+            </p>
+            <p>
+              <% if v.changeset.include? 'description' %>
+                You changed <b><%= User.find(v.user_id).name %>'s</b> grade's description from <b><%= v.description %></b> to
+                <% unless v.next.blank? %>
+                  <b><%= @versions.find(v.id).next.description %></b>.
+                <% else %>
+                  <b><%= Grade.find(v.item_id).description %></b>.
+                <% end %>
+              <% end %>
+            </p>
+          <% end %>
+        </li>
+      <% end %>
+      <%= link_to 'Back', subject_path(current_user.subject.id), class: 'btn btn-danger btn-sm', role: 'button' %>
+    </ul>
+</div>

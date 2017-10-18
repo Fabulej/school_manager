@@ -1,0 +1,21 @@
+
+
+<%= form_for(user) do |f| %>
+
+  <% if user.teacher? %>
+    <div class="field">
+      <%= f.label :subject, class: 'col-xs-2'%><br />
+      <%= f.select(:subject_id, options_from_collection_for_select(Subject.not_assigned, 'id', 'name'), class: "form-control") %>
+    </div>
+  <%elsif user.student? %>
+    <div class="field">
+      <%= f.label :school_class, class: 'col-xs-2'%><br />
+      <%= f.select(:school_class_id, options_from_collection_for_select(SchoolClass.all, 'id', 'name'), class: "form-control") %>
+    </div>
+
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit "Apply", class: 'btn btn-success btn-sm', role: 'button' %>
+  </div>
+<% end %>

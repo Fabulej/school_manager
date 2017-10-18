@@ -1,0 +1,22 @@
+  <h1><%= @user.name %></h1>
+  <% if @user.teacher? && current_user.admin? %>
+    <% unless @user.subject.nil? %>
+      <h3>Subject: <%= @user.subject.name %></h3>
+    <% else %>
+      <%= render 'assign_user', user: @user %>
+    <% end %>
+  <% elsif @user.student? %>
+    <% unless @user.school_class.nil? %>
+      <h3>Class: <%= @user.school_class.name %></h3>
+      <% @user.school_class.subjects.each do |subject| %>
+        <%= subject.name %>:
+        <% Grade.student_subject_grades(subject.id, @user.id).each do |grade| %>
+          <%= link_to grade.value, grade_path(grade) %><%= "," unless grade == Grade.where(user_id: @user).last %>
+        <% end %>
+        <br> 
+      <% end %>  
+    <% else %>
+      <%= render 'assign_user', user: @user %>
+    <% end %>
+  <% end %>
+  <%= link_to 'Back', :back, class: 'btn btn-danger btn-sm', role: 'button' %>

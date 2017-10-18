@@ -1,0 +1,25 @@
+<h2>Add Subject</h2>
+
+<% if @subject.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@subject.errors.count, "error") %> prohibited this subject from being saved:</h2>
+
+      <ul>
+      <% @subject.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+<% end %>
+
+<%= form_for @subject do |f| %>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, autofocus: true %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Confirm", class: 'btn btn-success btn-sm', role: 'button' %>
+  </div>
+<% end %>
+<%= link_to 'Back', subjects_path, class: 'btn btn-danger btn-sm', role: 'button' %>

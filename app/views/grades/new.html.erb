@@ -1,0 +1,40 @@
+<h2>Add Grade</h2>
+<h4><%= current_user.subject.name %></h4>
+
+<% if @grade.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@grade.errors.count, "error") %> prohibited this grade from being saved:</h2>
+
+      <ul>
+      <% @grade.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+<% end %>
+
+<%= form_for @grade do |f| %>
+  <div class="field">
+    <%= f.label :value %><br />
+    <%= f.select :value, options_for_select(Grade::ALLOWED_VALUES), class: "form-control" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_field :description, autofocus: true %>
+  </div>
+
+  <div class="field">
+    <%= f.hidden_field :subject_id, :value => current_user.subject_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :user, class: 'col-xs-2'%><br />
+    <%= f.select(:user_id, options_from_collection_for_select(User.teacher_students(current_user.id), 'id', 'class_and_user'), class: "form-control") %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Confirm", class: 'btn btn-success btn-sm', role: 'button' %>
+  </div>
+  <%= link_to 'Back', subject_path(current_user.subject.id), class: 'btn btn-danger btn-sm', role: 'button' %>
+<% end %>
